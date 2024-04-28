@@ -7,7 +7,7 @@ import tn.esprit.rh.achat.entities.Operateur;
 import tn.esprit.rh.achat.services.IOperateurService;
 
 import java.util.List;
-
+//modification
 @RestController
 @Api(tags = "Gestion des opérateurs")
 @RequestMapping("/operateur")

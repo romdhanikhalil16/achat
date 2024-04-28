@@ -26,6 +26,7 @@ public class StockRestController {
 		return list;
 	}
 
+
 	// http://localhost:8089/SpringMVC/stock/retrieve-stock/8
 	@GetMapping("/retrieve-stock/{stock-id}")
 	@ResponseBody
@@ -41,6 +42,7 @@ public class StockRestController {
 		return stock;
 	}
 
+
 	// http://localhost:8089/SpringMVC/stock/remove-stock/{stock-id}
 	@DeleteMapping("/remove-stock/{stock-id}")
 	@ResponseBody
@@ -54,6 +56,7 @@ public class StockRestController {
 	public Stock modifyStock(@RequestBody Stock stock) {
 		return stockService.updateStock(stock);
 	}
+
 
 	/*
 	 * Spring Scheduler : Comparer QteMin tolérée (à ne pa dépasser) avec
