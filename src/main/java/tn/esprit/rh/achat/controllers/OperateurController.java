@@ -23,6 +23,7 @@ public class OperateurController {
 	public List<Operateur> getOperateurs() {
 		List<Operateur> list = operateurService.retrieveAllOperateurs();
 		return list;
+
 	}
 
 	// http://localhost:8089/SpringMVC/operateur/retrieve-operateur/8
