@@ -11,27 +11,45 @@ pipeline {
       stage('Maven') {
             steps {
                 echo 'building project ...';
-                sh 'mvn clean install',
+                sh 'mvn clean compile install',
             }
         }
 
       stage('Test with Mockito and JUnit') {
             steps {
-                echo 'Test project ...';
-                // Install dependencies (assuming Maven)
-                sh 'mvn dependency:copy-dependencies'
-
-                // Test execution with JUnit
-                sh 'junit -cp "${WORKSPACE}/target/classes;${WORKSPACE}/target/test-classes"  **com.example.tests**.**MyTestSuite'
+                echo 'Testing project ...';
+                sh 'mvn test'
             }
         }
       stage('SonarQube') {
             steps {
                 echo 'Code Quality Testing (sonar) ...';
-                withSonarQubeEnv(serverUrl: 'http://192.168.28.129:9000', credentialsId: 'sonar-credentials-id') {
-                    sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar'
-                }
+                sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=sonar'
             }
     }
+      stage('NEXUS') {
+            steps {
+                echo 'deploying project...';
+                sh 'mvn deploy'
+            }
+        }
+      stage('Docker Build IMAGE') {
+            steps {
+                //sh 'docker build -t ahmedkhachlouf/achat-devops:1.0.0 .'
+            }
+        }
+      stage('Docker Deploy IMAGE') {
+            steps {
+                //sh 'docker login -u ahmedkhachlouf -p 223AMT0661'
+                //sh 'docker push ahmedkhachlouf/achat-devops:1.0.0'
+ 
+             }
+         }
+         stage('Docker Compose') {
+            steps {
+                //sh 'docker-compose up -d'
+ 
+             }
+         }
   }
 }
