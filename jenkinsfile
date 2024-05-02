@@ -1,11 +1,11 @@
 pipeline {
-  agent any {
+  agent any
     stages {
       stage('Build'){
         steps('checkout git') {
           echo 'pulling project from git ...';
           git branch : 'khalil_romdhani',
-          url 'https://github.com/romdhanikhalil16/achat'
+          url : 'https://github.com/romdhanikhalil16/achat'
         }
       }
       stage('Maven') {
@@ -52,4 +52,4 @@ pipeline {
              }
          }
   }
-}
+
