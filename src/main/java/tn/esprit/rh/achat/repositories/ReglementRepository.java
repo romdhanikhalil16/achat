@@ -8,9 +8,12 @@ import tn.esprit.rh.achat.entities.Reglement;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReglementRepository extends CrudRepository<Reglement, Long>{
+	Optional<Reglement> findById(Long id);
+	List<Reglement> findAll();     // Other methods if any}
 	@Query("SELECT r FROM Reglement r where r.facture.idFacture=:idFacture")
 	List<Reglement> retrieveReglementByFacture(@Param("idFacture") Long idFacture);
 

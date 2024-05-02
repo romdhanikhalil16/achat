@@ -34,5 +34,10 @@ public class Reglement implements Serializable{
 	@ManyToOne
 	@JsonIgnore
 	private Facture facture;
-	
+
+	public Reglement(long idReglement, Date dateReglement) {
+		this.idReglement=idReglement;
+		this.dateReglement=dateReglement;
+
+	}
 }
