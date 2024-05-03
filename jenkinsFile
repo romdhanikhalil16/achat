@@ -50,5 +50,25 @@ pipeline {
             }
                 }
          }
+      stage('Docker Build IMAGE') {
+            steps {
+                echo 'building docker image...';
+                sh 'docker build -t dalitriki07365/achat-devops:1.0.0 .'
+            }
+        }
+      stage('Docker Deploy IMAGE') {
+            steps {
+                echo 'deploying docker image...';
+                sh 'docker login -u dalitriki07365 -p azertyuiop'
+                sh 'docker push dalitriki07365/achat-devops:1.0.0'
+ 
+             }
+         }
+         stage('Docker Compose') {
+            steps {
+                echo 'composing docker image...';
+
+             }
+         }
   }
 }
