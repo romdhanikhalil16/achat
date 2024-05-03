@@ -16,7 +16,7 @@ services:
     image: khajji/achat-devops:1.0.0
     restart: on-failure
     ports:
-      - "8082:8082"
+      - "8091:8091"
     depends_on:
       - mysqldb
     environment:
