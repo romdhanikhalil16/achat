@@ -36,7 +36,6 @@ pipeline {
       stage('Docker Build IMAGE') {
             steps {
                 echo 'building docker image...';
-                sh 'sudo usermod -aG docker admin',
                 sh 'docker build -t khalil16/achat-devops:1.0.0 .'
             }
         }
