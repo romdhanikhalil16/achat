@@ -34,6 +34,23 @@ public class Facture implements Serializable {
 	private Date dateCreationFacture;
 	@Temporal(TemporalType.DATE)
 	private Date dateDerniereModificationFacture;
+
+	public Long getIdFacture() {
+		return idFacture;
+	}
+
+	public void setIdFacture(Long idFacture) {
+		this.idFacture = idFacture;
+	}
+
+	public Boolean isArchivee() {
+		return archivee;
+	}
+
+	public void setArchivee(Boolean archivee) {
+		this.archivee = archivee;
+	}
+
 	private Boolean archivee;
 	@OneToMany(mappedBy = "facture")
 	private Set<DetailFacture> detailsFacture;
