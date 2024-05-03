@@ -36,14 +36,13 @@ pipeline {
       stage('Docker Build IMAGE') {
             steps {
                 echo 'building docker image...';
-                //sh 'docker build -t ahmedkhachlouf/achat-devops:1.0.0 .'
+               
             }
         }
       stage('Docker Deploy IMAGE') {
             steps {
                 echo 'deploying docker image...';
-                //sh 'docker login -u ahmedkhachlouf -p 223AMT0661'
-                //sh 'docker push ahmedkhachlouf/achat-devops:1.0.0'
+                
  
              }
          }
