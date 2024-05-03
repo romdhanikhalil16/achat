@@ -1,0 +1,54 @@
+pipeline {
+  agent any
+  tools {
+      maven "M2_HOME"
+  }
+    stages {
+      stage('Chekout Git') {
+            steps {
+               git branch:'dali', 
+               url: 'https://github.com/romdhanikhalil16/achat.git'
+            }
+        }
+      stage('Maven') {
+            steps {
+                echo 'building project ...';
+                sh 'mvn clean compile'
+            }
+        }
+
+      stage('Test with Mockito and JUnit') {
+            steps {
+                echo 'Testing project ...';
+                sh 'mvn test'
+            }
+        }
+      stage('SonarQube') {
+            steps {
+                echo 'Code Quality Testing (sonar) ...';
+                sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=azertyuiop'
+            }
+    }
+      stage('NEXUS') {
+            steps {
+                echo 'deploying project...';
+                sh 'mvn deploy'
+            }
+        }
+        stage('Prometheus') {
+            steps {
+                script {
+                    sh 'curl -X POST -d "status=success" http://192.168.163.128:9090/metrics/job/prometheus_stage'
+                }
+            }
+        }
+        stage('Grafana') {
+            steps {
+                script {
+                    sh 'curl -X POST -d "prometheus_url=http://192.168.163.128:9090/" -d "grafana_url=http://192.168.163.128:3000/" http://192.168.163.128:8089/api/datasources'
+            // Create Grafana dashboards here if needed
+            }
+                }
+         }
+  }
+}
