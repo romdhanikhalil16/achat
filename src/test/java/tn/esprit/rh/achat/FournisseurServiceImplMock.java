@@ -73,4 +73,15 @@ public class FournisseurServiceImplMock {
         assertEquals(fournisseurs.get(1), retrievedFournisseurs.get(1));
     }
 
+    @Test
+    public void testAddFournisseur() {
+        Fournisseur fournisseurToAdd = new Fournisseur(4L, "code4", "libelle4");
+        Mockito.when(fournisseurRepository.save(fournisseurToAdd)).thenReturn(fournisseurToAdd);
+
+        // Call the method to add fournisseur
+        Fournisseur addedFournisseur = fournisseurService.addFournisseur(fournisseurToAdd);
+
+        // Assert that the added fournisseur matches the expected fournisseur
+        assertEquals(fournisseurToAdd, addedFournisseur);
+    }
 }
