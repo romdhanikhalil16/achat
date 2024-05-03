@@ -36,20 +36,22 @@ pipeline {
       stage('Docker Build IMAGE') {
             steps {
                 echo 'building docker image...';
-               
+                sh 'sudo usermod -aG docker admin',
+                sh 'docker build -t khalil16/achat-devops:1.0.0 .'
             }
         }
       stage('Docker Deploy IMAGE') {
             steps {
                 echo 'deploying docker image...';
-                
+                sh 'docker login -u khalil16 -p khalil123'
+                sh 'docker push khalil16/achat-devops:1.0.0'
  
              }
          }
          stage('Docker Compose') {
             steps {
                 echo 'composing docker image...';
-                //sh 'docker-compose up -d'
+                sh 'docker-compose up -d'
  
              }
          }
