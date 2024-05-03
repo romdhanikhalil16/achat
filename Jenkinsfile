@@ -23,26 +23,46 @@ pipeline {
                 sh "mvn compile"
             }
         }
-        
+
         stage('Test with Mockito/JUnit') {
             steps {
                 sh 'mvn test'
             }
         }
-        
+
         stage('MVN SONARQUBE') {
             steps {
                 sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=sonar'
             }
         }
-        
+
         stage('NEXUS') {
             steps {
                 echo 'deploying project...';
                 sh 'mvn deploy'
             }
         }
-        
+
+        stage('Building Image'){
+            steps {
+                sh 'docker build -t waliddocker20/achat:1.0.0 .'
+            }
+        }
+
+        stage('Deploy Image') {
+            steps {
+                echo 'deploying docker image...';
+                sh '''docker login -u waliddocker20 -p docker789
+                      docker push waliddocker20/achat:1.0.0'''
+             }
+         }
+         stage('Docker Compose') {
+            steps {
+                echo 'composing docker image...';
+                sh 'docker-compose up -d'
+             }
+         }
+
         stage('Build') {
             steps {
                 // Run Maven to build the project
