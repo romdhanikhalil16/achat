@@ -1,55 +1,77 @@
+
 pipeline {
-  agent any {
+    agent any
+ 
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "M2_HOME"
+    }
+ 
     stages {
-      stage('Build'){
-        steps('checkout git') {
-          echo 'pulling project from git ...';
-          git branch : 'khalil_romdhani',
-          url 'https://github.com/romdhanikhalil16/achat'
-        }
-      }
-      stage('Maven') {
+        stage('GIT Checkout'){
+            steps{
+            git branch: 'khalil_hajji',
+            url : 'https://github.com/romdhanikhalil16/achat.git'
+            }
+            }
+            stage('BUILD') {
             steps {
-                echo 'building project ...';
-                sh 'mvn clean compile install',
+                sh 'mvn clean'
+                sh 'mvn compile'
+                sh 'mvn install'
             }
         }
-
-      stage('Test with Mockito and JUnit') {
+        stage('MVN SONARQUBE') {
             steps {
-                echo 'Testing project ...';
+                sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=sonar'
+            }
+        }
+        stage('MOCKITO') {
+            steps {
                 sh 'mvn test'
             }
         }
-      stage('SonarQube') {
+ 
+        stage('NEXUS') {
             steps {
-                echo 'Code Quality Testing (sonar) ...';
-                sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=sonar'
-            }
-    }
-      stage('NEXUS') {
-            steps {
-                echo 'deploying project...';
                 sh 'mvn deploy'
             }
         }
-      stage('Docker Build IMAGE') {
+         stage('Building IMAGE') {
             steps {
-                //sh 'docker build -t ahmedkhachlouf/achat-devops:1.0.0 .'
+                sh 'docker build -t khajji/achat-devops:1.0.0 .'
             }
         }
-      stage('Docker Deploy IMAGE') {
+        stage('Deploy IMAGE') {
             steps {
-                //sh 'docker login -u ahmedkhachlouf -p 223AMT0661'
-                //sh 'docker push ahmedkhachlouf/achat-devops:1.0.0'
+                sh 'docker login -u khajji -p khalilhajji'
+                sh 'docker push khajji/achat-devops:1.0.0'
  
              }
          }
-         stage('Docker Compose') {
+        stage('Docker Compose') {
             steps {
-                //sh 'docker-compose up -d'
- 
+                echo 'composing docker image...';
+                sh 'docker-compose up -d'
              }
          }
-  }
+        stage('Prometheus') {
+            steps {
+                script {
+                    sh 'curl -X POST -d "status=success" http://localhost:9090/metrics/job/prometheus_stage'
+                }
+            }
+        }
+
+        stage('Grafana') {
+            steps {
+                script {
+                    sh 'curl -X POST -d "prometheus_url=http://localhost:9090/" -d "grafana_url=http://localhost:3000/" http://localhost:8080/api/datasources'
+
+                        }
+                 }
+            }
+ 
+ 
+    }
 }
